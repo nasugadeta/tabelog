@@ -1,0 +1,54 @@
+<%= search_form_for @q do |f| %>
+  <div class="row">
+      <div class="col-sm-3 col-xs-12">
+        <div class="form-group">
+          <%= f.label :shop_name, '店名' %>
+          <%= f.search_field :shop_name_cont, class: "form-control input-sm" %>
+        </div>
+      </div>
+  <div class="row">
+    <div class="col-sm-1 col-xs-12">
+      <br><%= f.submit "検索", class: "btn btn-default" %>
+    </div>
+  </div>
+<% end -%>
+
+<div class="col-md-3">
+  <div class="list-group">
+    <h3>注目の店舗</h3>
+  </div>
+</div>
+
+<div class="col-sm-6">
+  <p id="notice"><%= notice %></p>
+  <div class>
+    <h1>店舗一覧</h1>
+    <% @restaurants.each do |restaurant| %>
+    <div class ="panel panel-default">
+      <div class ="panel panel-heading">
+        <h3><%= restaurant.shop_name %></h3>
+        <p><img src="<%= restaurant.img_url %>"></p>
+        <p>平均点：<%= restaurant.reviews.average(:rate) %></p>
+        <p>レビュー数：<%= restaurant.reviews.count %></p>
+        <p><%= restaurant.address %></p>
+        <%= link_to '詳細を見る', restaurant, class: "btn btn-default" %>/
+        <%= link_to '編集する', edit_restaurant_path(restaurant) %>/
+        <%= link_to '削除する', restaurant, method: :delete, data: { confirm: 'Are you sure?' } %>
+      </div>
+    </div>
+    <% end %>
+    </div>
+  </div>
+  <hr>
+  <p><%= link_to 'レストランを新規登録する', new_restaurant_path %></p>
+<%= paginate @restaurants %>
+</div>
+
+<div class="col-md-3">
+  <div class="list-group">
+    <h3>最近のレビュー</h3>
+  </div>
+</div>
+
+
+

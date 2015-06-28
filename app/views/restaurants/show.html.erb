@@ -1,0 +1,86 @@
+<h1><%= @restaurant.shop_name %></h1><br>
+<img src="<%= @restaurant.img_url %>">
+
+<hr>
+<% if user_signed_in? %>
+  <p><%= link_to "レビューを投稿", new_restaurant_review_path(@restaurant) %></p>
+<% else %>
+  <li><%= link_to"ログインしてレビューを投稿", user_session_path  %></li>
+<% end %>
+<hr>
+
+<h2>平均点</h2>
+
+<% if @average > 4 %>
+  <em>⭐️⭐️⭐️⭐️⭐️</em>
+<% elsif @average > 3 %>
+  <em>⭐️⭐️⭐️⭐️☆</em>
+<% elsif @average > 2 %>
+  <em>⭐️⭐️⭐️☆☆</em>
+<% elsif @average > 1 %>
+  <em>⭐️⭐️☆☆☆</em>
+<% elsif @average > 0 %>
+  <em>⭐️☆☆☆☆</em>
+<% elsif  %>
+  <em>なし</em>
+<% else %>
+  <em>くそ</em>
+<% end %>
+
+<hr>
+
+<h2>レビュー一覧</h2>
+<% @restaurant.reviews.each do |review| %>
+  <p>
+    <%= review.body %> <br>
+    <p>評価:
+      <% if review.rate == 5 %>
+        <em>⭐️⭐️⭐️⭐️⭐️</em>
+      <% elsif review.rate == 4 %>
+        <em>⭐️⭐️⭐️⭐️☆</em>
+      <% elsif review.rate == 3 %>
+        <em>⭐️⭐️⭐️☆☆</em>
+      <% elsif review.rate == 2 %>
+        <em>⭐️⭐️☆☆☆</em>
+      <% elsif review.rate == 1 %>
+        <em>⭐☆☆☆☆</em>
+      <% else review.rate == 0 %>
+        <em></em>
+      <% end %>
+    </p>
+    by <%= review.user.family_name %><%= review.user.given_name %><br>
+    <%= review.updated_at.strftime("%Y/%m/%d") %>
+
+    <% if review.user_id == current_user.id %>
+      <p><%= link_to"レビューを編集", edit_restaurant_review_path(@restaurant, review) %></p>
+    <% else %>
+      <p>レビューしたユーザーはあなたではありません</p>
+    <% end %>
+
+  </p>
+  <hr>
+<% end %><br>
+
+<table class ="table table-striped", class ="form-group">
+  <tbody>
+    <tr>
+      <th>店名</th>
+      <th><%= @restaurant.shop_name %></th>
+    </tr>
+    <tr>
+      <th>電話番号</th>
+      <th><%= @restaurant.phon_number %></th>
+    </tr>
+    <tr>
+      <th>住所</th>
+      <th><%= @restaurant.address %></th>
+    </tr>
+    <tr>
+      <th>URL</th>
+      <th><a href="<%= @restaurant.url %>">公式ページ</a></th>
+      <!-- 地図を表示させてみては？ -->
+    </tr>
+  </tbody>
+</table>
+<%= link_to '戻る', restaurants_path %>/
+<%= link_to '編集する', edit_restaurant_path(@restaurant) %>
